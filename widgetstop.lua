@@ -5,13 +5,26 @@ mytextclock = awful.widget.textclock()
 
 local font = "DejaVu Sans 8"
 
+-- check if we have a wlan0 device
+local wlan0_file = io.open("/sys/class/net/wlan0")
+local wlan_present = false
+if not wlan0_file == nil then
+    wlan0_present = true
+    io.close(wlan0_file)
+end
+
+-- check if we have a bat0 device
+local bat0_file = io.open("/sys/class/power_supply/BAT0")
+local bat_present = false
+if not bat0_file == nil then
+    bat0_present = true
+    io.close(bat0_file)
+end
+
 --{{-- Time and Date Widget }} --
 tdwidget = wibox.widget.textbox()
-local strf = '| <span color="white">%d %b - <b>%H:%M</b></span>'
+local strf = ' <span color="white">%d %b - <b>%H:%M</b></span> '
 vicious.register(tdwidget, vicious.widgets.date, strf, 30)
-
-clockicon = wibox.widget.imagebox()
-clockicon:set_image(beautiful.clock)
 
 --{{ Net Widget }} --
 netwidget = wibox.widget.textbox()
@@ -39,61 +52,26 @@ wifiwidget = wibox.widget.imagebox()
 --         neticon:set_image(beautiful.netlow)
 --     end
 -- end, 120, 'wlan0')
-vicious.register(wifiwidget, vicious.widgets.wifi, '| Wifi: <span color="white">$1%</span> ', 60, 'wlan0')
+vicious.register(wifiwidget, vicious.widgets.wifi, '| Wifi: <span color="white">${link}%</span> ', 30, 'wlan0')
 
 --{{ Battery Widget }} --
-baticon = wibox.widget.imagebox()
-baticon:set_image(beautiful.baticon)
-
 batwidget = wibox.widget.textbox()
-vicious.register( batwidget, vicious.widgets.bat, '| BAT: <span color="white">$1$2%</span> ', 30, "BAT0" )
+vicious.register( batwidget, vicious.widgets.bat, '| BAT: <span color="white">$1 <b>$2%</b> ($3)</span> ', 30, 'BAT0' )
 
-
---{{---| File Size widget |-----
-fswidget = wibox.widget.textbox()
-
-vicious.register(fswidget, vicious.widgets.fs,
-'<span background="#D0785D" font="' .. font .. '"> <span font="' .. font .. '" color="#EEEEEE">${/home used_gb}/${/home avail_gb} GB </span></span>', 
-800)
-
-fsicon = wibox.widget.imagebox()
-fsicon:set_image(beautiful.fsicon)
 
 ----{{--| Volume / volume icon |----------
 volume = wibox.widget.textbox()
 vicious.register(volume, vicious.widgets.volume,
-'| VOL: <span color="white">$1%</span> ', 0.3, "Master")
-
-volumeicon = wibox.widget.imagebox()
-vicious.register(volumeicon, vicious.widgets.volume, function(widget, args)
-    local paraone = tonumber(args[1])
-
-    if args[2] == "♩" or paraone == 0 then
-        volumeicon:set_image(beautiful.mute)
-    elseif paraone >= 67 and paraone <= 100 then
-        volumeicon:set_image(beautiful.volhi)
-    elseif paraone >= 33 and paraone <= 66 then
-        volumeicon:set_image(beautiful.volmed)
-    else
-        volumeicon:set_image(beautiful.vollow)
-    end
-
-end, 0.3, "Master")
+'| VOL: <span color="white">$1%</span> ', 0.3, 'Master')
 
 --{{---| CPU / sensors widget |-----------
 cpuwidget = wibox.widget.textbox()
 vicious.register(cpuwidget, vicious.widgets.cpu,
-'| CPU: <span color="white">$1%</span> ', 5)
-
-cpuicon = wibox.widget.imagebox()
-cpuicon:set_image(beautiful.cpuicon)
+' CPU: <span color="white">$1%</span> ', 5)
 
 --{{--| MEM widget |-----------------
 memwidget = wibox.widget.textbox()
-
 vicious.register(memwidget, vicious.widgets.mem, '| RAM: <span color="white">$1%</span> ($2MB) ', 20)
-memicon = wibox.widget.imagebox()
-memicon:set_image(beautiful.mem)
 
 
 -- Create a wibox for each screen and add it
@@ -172,22 +150,15 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
-    if s == 1 then right_layout:add(wibox.widget.systray()) end
 
     -- right_layout:add(mytextclock)
-    --right_layout:add(cpuicon)
     right_layout:add(cpuwidget)
-    --right_layout:add(memicon)
     right_layout:add(memwidget)
-    --right_layout:add(volumeicon)
     right_layout:add(volume)
-    --right_layout:add(fsicon)
-    --right_layout:add(fswidget)
-    --right_layout:add(baticon)
-    right_layout:add(batwidget)
-    right_layout:add(wifiwidget)
+    if bat_present then right_layout:add(batwidget) end
+    if wlan_present then right_layout:add(wifiwidget) end
     right_layout:add(netwidget)
-    --right_layout:add(clockicon)
+    if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(tdwidget)
     right_layout:add(mylayoutbox[s])
 

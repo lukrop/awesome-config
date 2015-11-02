@@ -1,2 +1,5 @@
-awful.util.spawn_with_shell("compton --backend glx --vsync opengl-swc -c -t -10 -l -18 -o 0.5 -f -D 3")
-
+awful.util.spawn_with_shell("compton --backend glx --vsync opengl-swc -c -t -10 -l -18 -o 0.65 -f -D 3")
+awful.util.spawn_with_shell("xbindkeys")
+awful.util.spawn_with_shell("xset -dpms  && xset s off && xset s noblank")
+awful.util.spawn_with_shell("nm-applet")
+awful.util.spawn_with_shell("owncloud")
