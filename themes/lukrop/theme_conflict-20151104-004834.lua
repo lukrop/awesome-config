@@ -24,11 +24,9 @@ theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
 theme.border_width  = 1
-theme.border_normal = "#222222"
---theme.border_focus  = "#535d6c"
---
+theme.border_normal = "#000000"
+theme.border_focus  = "#535d6c"
 --theme.border_focus  = "#ff5555"
-theme.border_focus = "#43ACE8"
 theme.border_marked = "#91231c"
 
 -- theme.bg_normal     = "#222222"
@@ -115,6 +113,42 @@ theme.layout_spiral  = themes .. "/lukrop/layouts/spiralw.png"
 theme.layout_dwindle = themes .. "/lukrop/layouts/dwindlew.png"
 
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
+
+-- The clock icon:
+theme.clock = themes .. "/lukrop/icons/myclocknew.png"
+
+--{{ For the wifi widget icons }} --
+theme.nethigh = themes .. "/lukrop/icons/nethigh.png"
+theme.netmedium = themes .. "/lukrop/icons/netmedium.png"
+theme.netlow = themes .. "/lukrop/icons/netlow.png"
+
+--{{ For the battery icon }} --
+theme.baticon = themes .. "/lukrop/icons/battery.png"
+
+--{{ For the hard drive icon }} --
+theme.fsicon = themes .. "/lukrop/icons/hdd.png"
+
+--{{ For the volume icons }} --
+theme.mute = themes .. "/lukrop/icons/mute.png"
+theme.music = themes .. "/lukrop/icons/music.png"
+
+--{{ For the volume icon }} --
+theme.mute = themes .. "/lukrop/icons/volmute.png"
+theme.volhi = themes .. "/lukrop/icons/volhi.png"
+theme.volmed = themes .. "/lukrop/icons/volmed.png"
+theme.vollow = themes .. "/lukrop/icons/vollow.png"
+
+--{{ For the CPU icon }} --
+theme.cpuicon = themes .. "/lukrop/icons/cpu.png"
+
+--{{ For the memory icon }} --
+theme.mem = themes .. "/lukrop/icons/mem.png"
+
+--{{ For the memory icon }} --
+theme.mail = themes .. "/lukrop/icons/mail.png"
+theme.mailopen = themes .. "/lukrop/icons/mailopen.png"
+
+
 
 
 -- Define the icon theme for application icons. If not set then the icons 

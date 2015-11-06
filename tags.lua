@@ -1,6 +1,6 @@
 -- Shifty configured tags.
 shifty.config.tags = {
-    [" 1:term"] = {
+    [" 1:tile"] = {
         layout    = awful.layout.suit.tile,
         position  = 1,
         exclusive = true,
@@ -12,22 +12,34 @@ shifty.config.tags = {
         layout    = awful.layout.suit.floating,
         position  = 2,
         exclusive = true,
+        init      = true,
         spawn     = "iceweasel",
+        nopopup   = true,
     },
     [" 3:com"] = {
         layout    = awful.layout.suit.floating,
         position  = 3,
         exclusive = true,
-        spawn     = "icedove"
+        init      = true,
+--        spawn     = "icedove",
+        nopopup   = true,
     },
     [" 4:float"] = {
         layout    = awful.layout.suit.floating,
         position  = 4,
-        -- nopopup   = true,
+        init      = true,
+        nopopup   = true,
     },
-    [" 5:media"] = {
-        layout    = awful.layout.suit.tile,
+    [" 5:dev"] = {
+        layout    = awful.layout.suit.floating,
         position  = 5,
+        init      = true,
+        nopopup   = true,
+    },
+    [" 9:media"] = {
+        layout    = awful.layout.suit.tile,
+        exclusive = true,
+        position  = 9,
     }
 }
 
@@ -39,7 +51,9 @@ shifty.config.apps = {
             "iceweasel",
             "Iceweasel",
             "google-chrome",
-            "Google Chrome"
+            "Google Chrome",
+            "Firefox",
+            "firefox"
         },
         tag = " 2:web",
     },
@@ -51,6 +65,17 @@ shifty.config.apps = {
             "TeamSpeak",
             "Pidgin",
             "Buddy.*List",
+            "Icedove",
+            "icedove",
+            "Thunderbird",
+            "thunderbird",
+            "KMail",
+            "Kmail",
+            "kmail",
+            "Kontact",
+            "kontact",
+            "kopete",
+            "Kopete",
         },
         tag = " 3:com",
     },
@@ -59,6 +84,7 @@ shifty.config.apps = {
             class = {
                 "TeamSpeak",
                 "Pidgin",
+                "Kopete",
             }
         },
         floating = true,
@@ -69,13 +95,24 @@ shifty.config.apps = {
             "Icedove",
             "iceweasel",
             "icedove",
+            "Thunderbird",
+            "thunderbird",
+            "KMail",
+            "Kmail",
+            "kmail",
+            "Kontact",
+            "kontact",
         },
         -- run = function (c) c.maximized = true end,
     },
     {
         match = {
-            "terminator",
             "x-terminal-emulator",
+            "Konsole",
+            "Dolphin",
+            class = {
+                "konsole",
+            },
         },
         intrusive = true,
         honorsizehints = false,
@@ -84,18 +121,31 @@ shifty.config.apps = {
     },
     {
         match = {
-            "KeePassX",
+            class = {
+                "Keepassx",
+                "keepassx",
+            },
         },
-        tag = " 4:float",
+        intrusive = true,
+        floating = true,
+    },
+    {
+        match = {
+            "Android Studio",
+            "Intellij IDEA",
+            "Eclipse",
+        },
+        tag = " 5:dev",
     },
     {
         match = {
             class = {
                 "mpv",
+                "vlc",
             },
         },
         floating = true,
-        tag = " 5:media",
+        tag = " 9:media",
     },
     {
         match = {""},
