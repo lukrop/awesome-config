@@ -14,7 +14,8 @@ shifty = require("shifty")
 
 -- {{{ Variable definitions
 -- This is used later as the default terminal and editor to run.
-terminal = "terminator"
+--terminal = "terminator"
+terminal = "konsole"
 editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
 

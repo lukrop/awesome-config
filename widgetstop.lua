@@ -5,22 +5,6 @@ mytextclock = awful.widget.textclock()
 
 local font = "DejaVu Sans 8"
 
--- check if we have a wlan0 device
-local wlan0_file = io.open("/sys/class/net/wlan0")
-local wlan_present = false
-if not wlan0_file == nil then
-    wlan0_present = true
-    io.close(wlan0_file)
-end
-
--- check if we have a bat0 device
-local bat0_file = io.open("/sys/class/power_supply/BAT0")
-local bat_present = false
-if not bat0_file == nil then
-    bat0_present = true
-    io.close(bat0_file)
-end
-
 --{{-- Time and Date Widget }} --
 tdwidget = wibox.widget.textbox()
 local strf = ' <span color="white">%d %b - <b>%H:%M</b></span> '
@@ -37,41 +21,50 @@ vicious.register(netwidget, vicious.widgets.net, function(widget, args)
     else
         return ""
     end
-    return '| RX: <span color="white">'..args["{"..interface.." down_mb}"]..'</span> '
-    ..'TX: <span color="white">'..args["{"..interface.." up_mb}"]..'</span> ' end, 2)
+    return '| RX: <span color="white">'..args["{"..interface.." down_kb}"]..'</span> '
+    ..'TX: <span color="white">'..args["{"..interface.." up_kb}"]..'</span> ' end, 3)
 
 ---{{---| Wifi Signal Widget |-------
-wifiwidget = wibox.widget.imagebox()
--- vicious.register(neticon, vicious.widgets.wifi, function(widget, args)
---     local sigstrength = tonumber(args["{link}"])
---     if sigstrength > 69 then
---         neticon:set_image(beautiful.nethigh)
---     elseif sigstrength > 40 and sigstrength < 70 then
---         neticon:set_image(beautiful.netmedium)
+-- wifiwidget = wibox.widget.textbox()
+-- vicious.register(wifiwidget, vicious.widgets.wifi, function(widget, args)
+--     local link = tonumber(args["{link}"])
+--     if link > 0 then
+--         return '| Wifi: <span color="white">' .. args['{link}'] .. '%</span> '
 --     else
---         neticon:set_image(beautiful.netlow)
+--         return ''
 --     end
--- end, 120, 'wlan0')
-vicious.register(wifiwidget, vicious.widgets.wifi, '| Wifi: <span color="white">${link}%</span> ', 30, 'wlan0')
+-- end, 30, 'wlan0')
+
+-- {{{ CPU temperature
+thermalwidget  = wibox.widget.textbox()
+vicious.register(thermalwidget, vicious.widgets.thermal, "($1°C) ", 3, "thermal_zone0")
+-- }}}
 
 --{{ Battery Widget }} --
 batwidget = wibox.widget.textbox()
-vicious.register( batwidget, vicious.widgets.bat, '| BAT: <span color="white">$1 <b>$2%</b> ($3)</span> ', 30, 'BAT0' )
+vicious.register( batwidget, vicious.widgets.bat, function(widget, args)
+    local energy = tonumber(args[2])
+    if energy > 0 then
+        return '| BAT: <span color="white">' .. args[1] .. '<b>' .. args[2] .. '%</b> (' .. args[3] .. ')</span> '
+    else
+        return ''
+    end
+end, 30, 'BAT0' )
 
 
 ----{{--| Volume / volume icon |----------
 volume = wibox.widget.textbox()
 vicious.register(volume, vicious.widgets.volume,
-'| VOL: <span color="white">$1%</span> ', 0.3, 'Master')
+'| VOL: <span color="white">$1%</span> ', 3, 'Master')
 
 --{{---| CPU / sensors widget |-----------
 cpuwidget = wibox.widget.textbox()
 vicious.register(cpuwidget, vicious.widgets.cpu,
-' CPU: <span color="white">$1%</span> ', 5)
+' CPU: <span color="white">$1%</span> ', 3)
 
 --{{--| MEM widget |-----------------
 memwidget = wibox.widget.textbox()
-vicious.register(memwidget, vicious.widgets.mem, '| RAM: <span color="white">$1%</span> ($2MB) ', 20)
+vicious.register(memwidget, vicious.widgets.mem, '| RAM: <span color="white">$1%</span> ($2MB) ', 30)
 
 
 -- Create a wibox for each screen and add it
@@ -153,10 +146,11 @@ for s = 1, screen.count() do
 
     -- right_layout:add(mytextclock)
     right_layout:add(cpuwidget)
+    right_layout:add(thermalwidget)
     right_layout:add(memwidget)
     right_layout:add(volume)
-    if bat_present then right_layout:add(batwidget) end
-    if wlan_present then right_layout:add(wifiwidget) end
+    right_layout:add(batwidget)
+    --right_layout:add(wifiwidget)
     right_layout:add(netwidget)
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(tdwidget)
