@@ -83,15 +83,36 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
-    awful.key({ modkey,           }, "Tab",
-        function ()
-          awful.client.focus.byidx(1)
-             if client.focus then client.focus:raise() end
-            -- awful.client.focus.history.previous()
-            -- if client.focus then
-            --    client.focus:raise()
-            -- end
-        end),
+
+    -- modkey+Tab: cycle through all clients.
+    awful.key({ modkey,         }, "Tab", function(c)
+            cyclefocus.cycle(1, {
+                modifier="Super_L",
+                cycle_filters = { cyclefocus.filters.same_screen, cyclefocus.filters.common_tagk},
+            })
+    end),
+    -- modkey+Shift+Tab: backwards
+    awful.key({ modkey, "Shift" }, "Tab", function(c)
+            cyclefocus.cycle(-1, {modifier="Super_L"})
+    end),
+
+    -- Alt-Tab: cycle through clients on the same screen.
+    -- This must be a clientkeys mapping to have source_c available in the callback.
+    cyclefocus.key({ "Mod1", }, "Tab", 1, {
+        -- cycle_filters from the default filters:
+        cycle_filters = { cyclefocus.filters.same_screen, cyclefocus.filters.common_tag },
+    }),
+
+
+    -- awful.key({ modkey,           }, "Tab",
+    --     function ()
+    --       awful.client.focus.byidx(1)
+    --          if client.focus then client.focus:raise() end
+    --         -- awful.client.focus.history.previous()
+    --         -- if client.focus then
+    --         --    client.focus:raise()
+    --         -- end
+    --     end),
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),

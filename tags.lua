@@ -124,6 +124,7 @@ shifty.config.apps = {
             class = {
                 "Keepassx",
                 "keepassx",
+                "owncloud",
             },
         },
         intrusive = true,

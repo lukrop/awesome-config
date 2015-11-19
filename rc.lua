@@ -27,6 +27,8 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 -- }}}
 
+cyclefocus = require('cyclefocus')
+
 require("theme")
 require("layouts")
 require("tags")
