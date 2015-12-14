@@ -1,3 +1,4 @@
+local awful = require("awful")
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
 {

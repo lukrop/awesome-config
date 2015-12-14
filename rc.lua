@@ -1,16 +1,16 @@
 -- Standard awesome library
-gears = require("gears")
-awful = require("awful")
-require("awful.autofocus")
+--gears = require("gears")
+--awful = require("awful")
 -- Widget and layout library
-wibox = require("wibox")
+--wibox = require("wibox")
 -- Theme handling library
-beautiful = require("beautiful")
+--beautiful = require("beautiful")
 -- Notification library
-naughty = require("naughty")
-menubar = require("menubar")
+--naughty = require("naughty")
+--menubar = require("menubar")
 -- shifty - dynamic tagging library
-shifty = require("shifty")
+-- shifty = require("shifty")
+--tyrannical = require("tyrannical")
 
 -- {{{ Variable definitions
 -- This is used later as the default terminal and editor to run.
@@ -27,14 +27,16 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 -- }}}
 
-cyclefocus = require('cyclefocus')
+--cyclefocus = require('cyclefocus')
 
 require("theme")
-require("layouts")
-require("tags")
 require("menu")
 require("widgetstop")
+require("layouts")
 require("bindings")
+require("tags")
+require("rules")
 require("signals")
 require("autostart")
+require("awful.autofocus")
 

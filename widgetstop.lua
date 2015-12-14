@@ -1,4 +1,7 @@
 local vicious = require("vicious")
+local awful = require("awful")
+local wibox = require("wibox")
+
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
@@ -22,7 +25,7 @@ vicious.register(netwidget, vicious.widgets.net, function(widget, args)
         return ""
     end
     return '| RX: <span color="white">'..args["{"..interface.." down_kb}"]..'</span> '
-    ..'TX: <span color="white">'..args["{"..interface.." up_kb}"]..'</span> ' end, 3)
+    ..'TX: <span color="white">'..args["{"..interface.." up_kb}"]..'</span> ' end, 5)
 
 ---{{---| Wifi Signal Widget |-------
 -- wifiwidget = wibox.widget.textbox()
@@ -37,7 +40,7 @@ vicious.register(netwidget, vicious.widgets.net, function(widget, args)
 
 -- {{{ CPU temperature
 thermalwidget  = wibox.widget.textbox()
-vicious.register(thermalwidget, vicious.widgets.thermal, "($1°C) ", 3, "thermal_zone0")
+vicious.register(thermalwidget, vicious.widgets.thermal, "($1°C) ", 5, "thermal_zone0")
 -- }}}
 
 --{{ Battery Widget }} --
@@ -55,12 +58,12 @@ end, 30, 'BAT0' )
 ----{{--| Volume / volume icon |----------
 volume = wibox.widget.textbox()
 vicious.register(volume, vicious.widgets.volume,
-'| VOL: <span color="white">$1%</span> ', 3, 'Master')
+'| VOL: <span color="white">$1%</span> ', 5, 'Master')
 
 --{{---| CPU / sensors widget |-----------
 cpuwidget = wibox.widget.textbox()
 vicious.register(cpuwidget, vicious.widgets.cpu,
-' CPU: <span color="white">$1%</span> ', 3)
+' CPU: <span color="white">$1%</span> ', 5)
 
 --{{--| MEM widget |-----------------
 memwidget = wibox.widget.textbox()
@@ -165,10 +168,3 @@ for s = 1, screen.count() do
     mywibox[s]:set_widget(layout)
 end
 -- }}}
-
--- SHIFTY: initialize shifty
--- the assignment of shifty.taglist must always be after its actually
--- initialized with awful.widget.taglist.new()
-shifty.taglist = mytaglist
-shifty.init()
-

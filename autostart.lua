@@ -1,11 +1,1 @@
---awful.util.spawn_with_shell("compton --backend glx --vsync opengl-swc -cC -t -10 -l -18 -o 0.5")
-awful.util.spawn_with_shell("compton --backend glx --vsync opengl-swc -cC -o 0.5 -r 5 -t -5 -l -8")
-awful.util.spawn_with_shell("xbindkeys")
-awful.util.spawn_with_shell("xset -dpms  && xset s off && xset s noblank")
---awful.util.spawn_with_shell("/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1")
---awful.util.spawn_with_shell("nm-applet")
-awful.util.spawn_with_shell("kwalletd")
-awful.util.spawn_with_shell("owncloud")
-awful.util.spawn_with_shell("ssh-add")
---awful.util.spawn_with_shell('xautolock -time 15 -locker "i3lock -c 222222 && systemctl suspend" -detectsleep -corners 0-0-')
---awful.util.spawn_with_shell("pidgin")
+autostart_cheetah.lua

@@ -1,16 +1,21 @@
+local awful = require("awful")
+local menubar = require("menubar")
+local beautiful = require("beautiful")
+
 -- {{{ Menu
 -- Create a launcher widget and a main menu
 myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
+   { "poweroff", "sudo systemctl poweroff" },
+   { "reboot", "sudo systemctl reboot" },
+   { "--", ""},
    { "restart", awesome.restart },
    { "quit", awesome.quit }
 }
 
 webmenu = {
     { "iceweasel", "iceweasel" },
-    { "icedove", "icedove" },
     { "chrome", "google-chrome" },
+    { "kontact", "kontact" },
     { "pidgin", "pidgin" },
 }
 

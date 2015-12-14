@@ -1,3 +1,7 @@
+local awful = require("awful")
+local menubar = require("menubar")
+local cyclefocus = require("cyclefocus")
+
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
     awful.button({ }, 3, function () mymainmenu:toggle() end),
@@ -12,47 +16,14 @@ globalkeys = awful.util.table.join(
         awful.util.spawn("xbacklight -dec 15") end),
     awful.key({ }, "XF86MonBrightnessUp", function ()
         awful.util.spawn("xbacklight -inc 15") end),
-    -- awful.key({ }, "Print", function ()
-    --     awful.util.spawn("~/bin/screenshot.sh") end),
 
-    -- awful.key({ }, "XF86AudioRaiseVolume",  APW.Up),
-    -- awful.key({ }, "XF86AudioLowerVolume",  APW.Down),
-    -- awful.key({ }, "XF86AudioMute",         APW.ToggleMute),
+    awful.key({ modkey, "Control"}, "h",  awful.tag.viewprev       ),
+    awful.key({ modkey, "Control"}, "l",  awful.tag.viewnext       ),
+    awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
-    -- awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
-    -- awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
-    -- awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
-
-    -- Shifty: keybindings specific to shifty
-    awful.key({modkey, "Shift"}, "d", shifty.del), -- delete a tag
-    awful.key({modkey, "Shift"}, "n", shifty.send_prev), -- client to prev tag
-    awful.key({modkey}, "n", shifty.send_next), -- client to next tag
-    awful.key({modkey, "Control"},
-              "n",
-              function()
-                  local t = awful.tag.selected()
-                  local s = awful.util.cycle(screen.count(), awful.tag.getscreen(t) + 1)
-                  awful.tag.history.restore()
-                  t = shifty.tagtoscr(s, t)
-                  awful.tag.viewonly(t)
-              end),
-    awful.key({modkey}, "a", shifty.add), -- creat a new tag
-    awful.key({modkey, "Shift"}, "r", shifty.rename), -- rename a tag
-    awful.key({modkey, "Shift"}, "a", -- nopopup new tag
-    function()
-        shifty.add({nopopup = true})
-    end),
-
-    -- awful.key({ modkey,           }, "j",
-    --     function ()
-    --         awful.client.focus.byidx( 1)
-    --         if client.focus then client.focus:raise() end
-    --     end),
-    -- awful.key({ modkey,           }, "k",
-    --     function ()
-    --         awful.client.focus.byidx(-1)
-    --         if client.focus then client.focus:raise() end
-    --     end),
+    -- Layout manipulation
+    awful.key({ modkey, "Control"}, "h",   awful.tag.viewprev       ),
+    awful.key({ modkey, "Control"}, "l",  awful.tag.viewnext       ),
 
     awful.key({ modkey,           }, "j",
         function ()
@@ -85,34 +56,12 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
 
     -- modkey+Tab: cycle through all clients.
-    awful.key({ modkey,         }, "Tab", function(c)
-            cyclefocus.cycle(1, {
-                modifier="Super_L",
-                cycle_filters = { cyclefocus.filters.same_screen, cyclefocus.filters.common_tagk},
-            })
-    end),
-    -- modkey+Shift+Tab: backwards
-    awful.key({ modkey, "Shift" }, "Tab", function(c)
-            cyclefocus.cycle(-1, {modifier="Super_L"})
-    end),
-
-    -- Alt-Tab: cycle through clients on the same screen.
-    -- This must be a clientkeys mapping to have source_c available in the callback.
-    cyclefocus.key({ "Mod1", }, "Tab", 1, {
-        -- cycle_filters from the default filters:
-        cycle_filters = { cyclefocus.filters.same_screen, cyclefocus.filters.common_tag },
-    }),
-
-
-    -- awful.key({ modkey,           }, "Tab",
-    --     function ()
-    --       awful.client.focus.byidx(1)
-    --          if client.focus then client.focus:raise() end
-    --         -- awful.client.focus.history.previous()
-    --         -- if client.focus then
-    --         --    client.focus:raise()
-    --         -- end
-    --     end),
+    -- awful.key({ modkey,         }, "Tab", function(c)
+    --         awful.client.focus.history.previous()
+    --         if client.focus then
+    --             client.focus:raise()
+    --         end
+    -- end),
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
@@ -144,15 +93,13 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "p", function() menubar.show() end)
 )
 
-clientkeys = awful.util.table.join(
+clientkeys = awful.util.table.join(clientkeys,
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey,           }, "o",      function(c) awful.client.movetoscreen(c,c.screen-1) end ),
-    awful.key({ modkey,           }, "p",      function(c) awful.client.movetoscreen(c,c.screen+1) end ),
+    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
-    awful.key({ modkey, "Shift"   }, "t",      function (c) shifty.create_titlebar(c) awful.titlebar(c) c.border_width = 1 end),
     awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
@@ -163,42 +110,61 @@ clientkeys = awful.util.table.join(
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
-        end)
+        end),
+    cyclefocus.key({ modkey, }, "Tab", 1, {
+        cycle_filters = { cyclefocus.filters.common_tag },
+        display_notifications = false,
+        modifier='Super_L', keys={'Tab', 'ISO_Left_Tab'}
+    }),
+    cyclefocus.key({ modkey, "Shift", }, "Tab", 1, {
+        cycle_filters = { cyclefocus.filters.common_tag },
+        display_notifications = false,
+        modifier='Super_L', keys={'Tab', 'ISO_Left_Tab'}
+    })
 )
-
--- SHIFTY: assign client keys to shifty for use in
--- match() function(manage hook)
-shifty.config.clientkeys = clientkeys
-shifty.config.modkey = modkey
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, (shifty.config.maxtags or 9) do
+for i = 1, 9 do
     globalkeys = awful.util.table.join(globalkeys,
         awful.key({ modkey }, "#" .. i + 9,
                   function ()
-                      awful.tag.viewonly(shifty.getpos(i))
+                        local screen = mouse.screen
+                        local tag = awful.tag.gettags(screen)[i]
+                        if tag then
+                           awful.tag.viewonly(tag)
+                        end
                   end),
         awful.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()
-                      awful.tag.viewtoggle(shifty.getpos(i))
+                      local screen = mouse.screen
+                      local tag = awful.tag.gettags(screen)[i]
+                      if tag then
+                         awful.tag.viewtoggle(tag)
+                      end
                   end),
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
                   function ()
-                      if client.focus then
-                          local t = shifty.getpos(i)
-                          awful.client.movetotag(t)
-                          awful.tag.viewonly(t)
-                       end
+                      local tag = awful.tag.gettags(client.focus.screen)[i]
+                      if client.focus and tag then
+                          awful.client.movetotag(tag)
+                     end
                   end),
         awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
                   function ()
-                      if client.focus then
-                          awful.client.toggletag(shifty.getpos(i))
+                      local tag = awful.tag.gettags(client.focus.screen)[i]
+                      if client.focus and tag then
+                          awful.client.toggletag(tag)
                       end
                   end))
 end
+
+
+clientbuttons = awful.util.table.join(clientbuttons,
+    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+    awful.button({ modkey }, 1, awful.mouse.client.move),
+    awful.button({ modkey }, 3, awful.mouse.client.resize))
 
 -- Set keys
 root.keys(globalkeys)
