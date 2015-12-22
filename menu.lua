@@ -8,6 +8,9 @@ myawesomemenu = {
    { "poweroff", "sudo systemctl poweroff" },
    { "reboot", "sudo systemctl reboot" },
    { "--", ""},
+   { "suspend", "sudo systemctl suspend" },
+   { "hibernate", "sudo systemctl hibernate" },
+   { "--", ""},
    { "restart", awesome.restart },
    { "quit", awesome.quit }
 }

@@ -115,12 +115,13 @@ clientkeys = awful.util.table.join(clientkeys,
         cycle_filters = { cyclefocus.filters.common_tag },
         display_notifications = false,
         modifier='Super_L', keys={'Tab', 'ISO_Left_Tab'}
-    }),
-    cyclefocus.key({ modkey, "Shift", }, "Tab", 1, {
-        cycle_filters = { cyclefocus.filters.common_tag },
-        display_notifications = false,
-        modifier='Super_L', keys={'Tab', 'ISO_Left_Tab'}
     })
+    -- ,
+    -- cyclefocus.key({ modkey, "Shift", }, "Tab", 1, {
+    --     cycle_filters = { cyclefocus.filters.common_tag },
+    --     display_notifications = false,
+    --     modifier='Super_L', keys={'Tab', 'ISO_Left_Tab'}
+    -- })
 )
 
 -- Bind all key numbers to tags.
